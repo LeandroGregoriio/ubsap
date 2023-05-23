@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "ubsapp",
+    "slug": "ubsapp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
