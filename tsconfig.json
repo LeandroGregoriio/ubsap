@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {},
+  "include": [
+    "src",
+    "typings"
+  ],
+  "extends": "expo/tsconfig.base"
+}
