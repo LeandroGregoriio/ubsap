@@ -1,82 +1,66 @@
 import react from "react";
-import {Container, HomeText, Destaques, DestaquesText, Cards, HomeC} from './styles';
+import { useEffect, useState } from "react";
+import {Container, HomeText, DestaquesText, Cards} from './styles';
 import Card from '../../components/Card';
 import {UBSCardProps} from '../../components/UBSCard';
 import UBSCard from "../../components/UBSCard";
-import { ScrollView } from "react-native";
+import Header from "../../components/Header";
+import { collection, getFirestore, onSnapshot, doc } from "firebase/firestore";
+import {app} from '../../config/firebase'
 
-import {AcessarUBS, Title, UBSList} from './styles'
+import {Title, UBSList} from './styles'
 
-export interface DataListProps extends UBSCardProps{
-    id: string;
-  }
+export interface DataListProps extends UBSCardProps {
+    id:string,
+    
+}
 
-export default function Home(){
+export default function Home({route, navigation}:any){
 
 
-    const data: DataListProps[] = [
-        {
-        id: '1',
-        title:'UBS Vila Serranópolis',
-        estado:'Aberto',
-        horario:'08:00-17:30'
-        },
-        {
-            id: '2',
-            title:'UBS Vila Kennedy',
-            estado:'Aberto',
-            horario:'08:00-17:30'
-        },
+    const db = getFirestore(app);
+    const [unitys, setUnitys] = useState();
 
-        {
-            id: '3',
-            title:'UBS Vila São Sebastião',
-            estado:'Fechado',
-            horario:'08:00-17:30'
-        },
+    useEffect(() => {
 
-        {
-            id: '4',
-            title:'UBS Vila União',
-            estado:'Aberto',
-            horario:'08:00-17:30'
-        },
-        {
-            id: '5',
-            title:'UBS Tanque',
-            estado:'Aberto',
-            horario:'08:00-17:30'
-        },
-        {
-            id: '6',
-            title:'UBS Mulungu',
-            estado:'Aberto',
-            horario:'08:00-17:30'
-        },
-    ]
+        const colRef = collection(db, "unitys")
+          onSnapshot(colRef, (QuerySnapshot) => {
+              const unitys:any = []
+              QuerySnapshot.forEach((doc) => {
+                  const {capacity, ubsName, status, time, timeNow, estado} = doc.data()
+                  unitys.push({
+                      id: doc.id,
+                      capacity, 
+                      ubsName, 
+                      status,
+                      time,
+                      timeNow,
+                      estado
+                  })
+              })
+              setUnitys(unitys);
+          })
+  
+      }, []);
+
     return(
         
         <Container>
-            <HomeC>
+            <Header/>
+
             <HomeText>Home</HomeText>
-            <Destaques>
+  
                 <DestaquesText>Destaques</DestaquesText>
                 <Cards>
-                    <Card title='Medicamentos' type='medicamentos' nome='pill' />
-                    <Card title='Dieta' type='dieta' nome='food-off' />
+                    <Card title='Medicamentos' type='medicamentos' nome='pill' onPress={()=>navigation.navigate('MedicineScreen')} />
+                    <Card title='Dieta' type='dieta' nome='food-off'  />
                 </Cards>
-            </Destaques>
-            <AcessarUBS>
                 <Title>Acessar UBS</Title>
-              
                 <UBSList 
-                    data={data}
+                    data={unitys}
                     keyExtractor={item=>item.id}
-                    renderItem={({item})=><UBSCard data = {item} />}
+                    renderItem={({item})=><UBSCard data={item} onPress={()=>navigation.navigate("PaginaUBS", item)} />}
                 />
-        
-            </AcessarUBS>
-            </HomeC>
         </Container>
     )
 }

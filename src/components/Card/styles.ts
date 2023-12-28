@@ -14,13 +14,14 @@ export const Container = styled.TouchableOpacity<Props>`
     justify-content: center;
     align-items: center;
     margin-top: 21px;
-    background-color: ${({type})=>type==='medicamentos' ? '#4E6BC7' : '#2DAD47' };
+    background-color: ${({type})=>type==='medicamentos' ? '#1a44c9' : '#10982c' };
 `;
 
 
 export const Text = styled.Text`
     color: white;
     font-size: 16px;
+    font-family: ${({theme})=>theme.fonts.medium};
 `;
 
 export const Icon = styled(Feather)<Props>`
@@ -29,4 +30,5 @@ export const Icon = styled(Feather)<Props>`
 
 export const MaterialCommunityIcons = styled(Text)`
     font-size: 30px;
+    
 `

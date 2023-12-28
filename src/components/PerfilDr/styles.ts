@@ -8,14 +8,19 @@ export const Container = styled.View`
     height: 125px;
     margin-top: 20px;
     border-radius: 5px;
-    justify-content: start;
     align-items: center;
-    padding: 0px 20px 0px 20px;
+    padding: 10px 10px ;
 `;
 
 export const Nome = styled.Text`
     font-size:16px;
     color: ${({theme})=>theme.colors.tittle};
+    font-family: ${({theme})=>theme.fonts.semibold};
+`;
+
+export const Especialidade = styled.Text`
+    font-size:16px;
+    color: ${({theme})=>theme.colors.text};
     font-family: ${({theme})=>theme.fonts.semibold};
 `;
 export const Registro = styled.Text`
@@ -25,13 +30,15 @@ export const Registro = styled.Text`
 `;
 
 export const Foto = styled.Image`
-    height: 90px;
+    height: 100%;
     width: 90px;
     border-radius: 5px;
+ 
 `;
 
 export const Dados = styled.View`
     flex-direction: column;
-    text-align: center;
     margin-left: 20px;
+    justify-content: space-around;
+    height: 100%;
 `;

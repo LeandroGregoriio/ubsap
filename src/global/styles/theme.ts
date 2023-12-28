@@ -5,7 +5,8 @@ export default {
         vermelho:'#CA4949',
         verde:'#49CA63',
         amarelo:'#D2D62F',
-        roxo:'#863AFF' 
+        roxo:'#863AFF' ,
+        azul:'#1A51FF'
 
     },
     fonts:{

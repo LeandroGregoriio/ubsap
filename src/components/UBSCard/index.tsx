@@ -2,36 +2,48 @@ import React from "react";
 import {Container,
     Title,
     Estado, 
-    Horario,
+    Times,
     Header,
-    Footer
+    Footer,
+    Horarios,
+    NameIcon
 } from './styles';
 
 import { EvilIcons } from '@expo/vector-icons';
+import { TouchableOpacityProps } from "react-native";
 
-export interface UBSCardProps{
+export interface UBSCardProps  {
     id:string,
-    title:string,
-    estado:'Aberto' | 'Fechado',
-    horario:string,
+    ubsName:string,
+    status:'Aberta' | 'Fechada',
+    time:string,
+    timeNow:string
 }
 
-export interface Props{
-    data: UBSCardProps;
+export interface Props extends TouchableOpacityProps{
+    data: UBSCardProps
+    onPress: ()=> void;
 }
 
-export default function UBSCard({data}:Props){
+
+export default function UBSCard({data, onPress, ...rest}:Props){
 
     return(
-        <Container >
+        <Container  onPress={onPress}>
             <Header>
+                <NameIcon>
                 <EvilIcons name="location" size={35} color="#888888"/>
-                <Title>{data.title}</Title>
+                <Title>{data.ubsName}</Title> 
+                </NameIcon>
+                <Estado type={data.status}> {data.status}</Estado>
             </Header>
 
             <Footer>
-                <Estado type={data.estado}> {data.estado}</Estado>
-                <Horario>{data.horario}</Horario>
+                <Horarios>
+                <Times>{data.time}</Times>
+                <Times>{data.timeNow}</Times>
+                </Horarios>
+                
             </Footer>
         </Container>
     );

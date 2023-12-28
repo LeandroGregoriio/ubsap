@@ -1,6 +1,5 @@
 import React from "react";
 
-
 import {Container,TitleColor,Msg, Icon, Dados, Cor} from './styles'
 
 interface Props{
@@ -8,6 +7,7 @@ interface Props{
     msg:string;
     type:'vazia' |  'cheia' | 'intermediario';
 }
+
 
 export default function LotacaoCard({titleColor, msg, type}:Props){
     return(

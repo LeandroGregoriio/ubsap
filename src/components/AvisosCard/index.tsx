@@ -8,7 +8,7 @@ import {Container,
 
 export interface AvisosProps{
         title:string;
-        msg:string
+        description:string
        }
 
 export interface Props{
@@ -22,7 +22,7 @@ export default function AvisosCard({data}:Props){
             <Icon name='bell' />
             <Dados> 
                 <Title>{data.title}</Title>
-                <Msg>{data.msg}</Msg>
+                <Msg>{data.description}</Msg>
             </Dados>       
         </Container>
     )

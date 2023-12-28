@@ -8,24 +8,16 @@ interface Props{
     type : 'aberto' | 'fechado';
 }
                      
-export const  Container = styled.SafeAreaView`
+export const  Container = styled.View`
     background-color:#F8F8F8 ;
     flex: 1;
+    padding: 20px;
 `;
 
-export const HomeC = styled.View`
-    flex: 1;
-    margin-top: 60px;
-    margin: 0px 20px 0px 20px;
-`;
 export const HomeText=styled.Text`
     font-size: 22px;
     color: ${({theme})=>theme.colors.tittle};
     font-family: ${({theme})=>theme.fonts.bold};
-`;
-
-export const Destaques = styled.View`
-    margin-top: 30px;
 `;
 
 export const DestaquesText = styled.Text`
@@ -39,19 +31,13 @@ export const Cards = styled.View`
     justify-content: space-between;
 `;
 
-export const AcessarUBS = styled.View`
-    margin-top: 52px;
-    flex: 1;
-`;
-
 export const Title = styled.Text`
     font-family: ${({theme})=>theme.fonts.bold};
     color: ${({theme})=>theme.colors.tittle};
     font-size: 16px;
+    margin-top: 5%;
 `;
 
 export const UBSList = styled(FlatList<DataListProps>).attrs({
     showsVerticalScrollIndicator:false,
-})`
-    margin-top: 15px;
-`;
+})``;

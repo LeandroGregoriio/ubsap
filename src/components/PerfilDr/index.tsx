@@ -1,19 +1,23 @@
 import React from "react";
-import {Container, Nome, Registro, Foto, Dados} from './styles'
+import {Container, Nome, Registro, Foto, Dados, Especialidade} from './styles'
+import { ImageProps } from "react-native";
 
-interface DadosMedicos{
+interface DadosMedicos extends ImageProps {
     nome:string,
-    registro:string
-}
+    registro:string,
+    specialty:string
+} 
+
+export default function PerfilDr({nome,registro, specialty, source}:DadosMedicos){
 
 
-export default function PerfilDr({nome,registro}:DadosMedicos){
     return(
         <Container>
-            <Foto source={require('../../assets/medico.jpg')} />
+            <Foto source={source} />
             <Dados>
-             <Nome>{nome}</Nome>
-             <Registro>{registro}</Registro>
+             <Nome>{nome}</Nome> 
+             <Especialidade>{specialty}</Especialidade>
+             <Registro>CRM: {registro}</Registro> 
              </Dados>
         </Container>
     );

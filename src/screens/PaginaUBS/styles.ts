@@ -3,18 +3,14 @@ import styled from "styled-components/native";
 
 import { DadosAvisos } from ".";
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.View`
     flex: 1;
     background-color:#F8F8F8 ;
+    padding: 20px;
 `;
 
-export const Pagina = styled.View`
-    margin: 0px 20px 0px 20px;
-    flex: 1;
-`;
 
 export const Title = styled.Text`
-    margin-top: 40px;
     font-size:22px;
     font-family: ${({theme})=>theme.fonts.bold};
     color: ${({theme})=>theme.colors.tittle};
@@ -41,4 +37,5 @@ export const Avisos = styled.View`
 `;
 
 export const AvisosList = styled(FlatList<DadosAvisos>).attrs({})`
+    margin-top: 10px;
 `;
