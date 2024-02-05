@@ -1,18 +1,16 @@
 import styled from "styled-components/native";
+import { LinearGradient } from "expo-linear-gradient";
+
 
 export const Container = styled.View`
-    margin-top: 15%;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    margin-bottom: 5%;
+width: 100%;
+height: 100px;
+align-items: center;
+justify-content: center;
 `;
 
-
-export const Text = styled.Text`
-
-color: ${({theme})=>theme.colors.tittle};
-font-family: ${({theme})=>theme.fonts.bold};
-font-size: 20px;
-
+export const Logo = styled.Image`
+    width: 30%;
+    height: 80%;
+    align-items: center;
 `;

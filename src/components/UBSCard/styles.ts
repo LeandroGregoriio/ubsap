@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 
 interface Props{
-    type : 'Aberta' | 'Fechada';
+    type : 'aberta' | 'fechada';
 }
 
 
@@ -36,7 +36,7 @@ export const Title = styled.Text`
 
 export const Estado = styled.Text<Props>` 
     font-family: ${({theme})=>theme.fonts.medium};
-    color: ${({theme, type})=> type==='Fechada' ? theme.colors.vermelho : theme.colors.verde};
+    color: ${({theme, type})=> type==='fechada' ? theme.colors.vermelho : theme.colors.verde};
     font-size:16px;
 `;
 

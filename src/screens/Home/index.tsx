@@ -1,27 +1,33 @@
 import react from "react";
 import { useEffect, useState } from "react";
-import {Container, HomeText, DestaquesText, Cards} from './styles';
+import {Container, HomeText, DestaquesText, Cards, Header} from './styles';
 import Card from '../../components/Card';
 import {UBSCardProps} from '../../components/UBSCard';
 import UBSCard from "../../components/UBSCard";
-import Header from "../../components/Header";
 import { collection, getFirestore, onSnapshot, doc } from "firebase/firestore";
 import {app} from '../../config/firebase'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Logo from "../../components/Logo";
 
 import {Title, UBSList} from './styles'
 
 export interface DataListProps extends UBSCardProps {
     id:string,
-    
 }
 
-export default function Home({route, navigation}:any){
+export default function Home({ navigation}:any){
 
-
+ 
     const db = getFirestore(app);
-    const [unitys, setUnitys] = useState();
+    const [unitys, setUnitys] = useState(); 
 
     useEffect(() => {
+
+        const auth = getAuth(); 
+        onAuthStateChanged(auth, (user)=>{
+          console.log(user?.uid,'teste');
+        }) 
+     
 
         const colRef = collection(db, "unitys")
           onSnapshot(colRef, (QuerySnapshot) => {
@@ -44,16 +50,26 @@ export default function Home({route, navigation}:any){
       }, []);
 
     return(
-        
+        <Header>
+            <Logo/>
         <Container>
-            <Header/>
-
+            
             <HomeText>Home</HomeText>
   
                 <DestaquesText>Destaques</DestaquesText>
                 <Cards>
-                    <Card title='Medicamentos' type='medicamentos' nome='pill' onPress={()=>navigation.navigate('MedicineScreen')} />
-                    <Card title='Dieta' type='dieta' nome='food-off'  />
+                    <Card 
+                    title='Medicamentos' 
+                    onPress={()=>navigation.navigate("MedicineScreen" )}
+                    source={require('../../assets/IconPills.png')}
+                    />
+                    <Card 
+                    title='Dieta' 
+                    onPress={()=>{
+                        navigation.navigate("DietScreen")
+                    }}
+                    source={require('../../assets/DietIcon.png')}
+                    />
                 </Cards>
                 <Title>Acessar UBS</Title>
                 <UBSList 
@@ -62,5 +78,6 @@ export default function Home({route, navigation}:any){
                     renderItem={({item})=><UBSCard data={item} onPress={()=>navigation.navigate("PaginaUBS", item)} />}
                 />
         </Container>
+        </Header>
     )
 }

@@ -1,12 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import AvisosCard, {AvisosProps} from "../../components/AvisosCard";
-import Header from "../../components/Header";
-import { onSnapshot, collection, getFirestore, where, query } from "firebase/firestore";
+import { onSnapshot, collection, getFirestore, where, query } from "@firebase/firestore";
 import {app} from '../../config/firebase';
 import {getDownloadURL, ref, getStorage } from 'firebase/storage';
 import { Alert, Button } from "react-native";
-import * as Notifications from 'expo-notifications';
+import LogoColorida from "../../components/LogoColorida";
+import { View } from "react-native";
 import {
     Container,
     Title,
@@ -14,7 +14,9 @@ import {
     Text,
     Lotacao,
     Avisos,
-    AvisosList
+    AvisosList,
+    Fechada,
+    Header
 } from './styles'
 
 import PerfilDr from '../../components/PerfilDr';
@@ -43,6 +45,8 @@ export default function PaginaUBS( {route},{type}:Props){
     const [doctorSpecialty, setDoctorSpecialty] = useState('');
     const [ubsId, setUbsId] = useState(route?.params?.id)
     const [notices, setNotices] = useState();
+    const [capacity, setCapacity] = useState()
+    const [status, setStatus] = useState('')
 
     const handleCallNotifications = async()=>{
         const {status} = await Notifications.getPermissionsAsync();
@@ -67,14 +71,14 @@ export default function PaginaUBS( {route},{type}:Props){
     
 
     const ubsName = route?.params?.ubsName;
-    const estado = route?.params?.estado;
-    type= estado;
+
 
             
     const storage = getStorage(); 
     const db=getFirestore(app);
     const colRef = query(collection(db, "notices"), where('unity','==', ubsId ))
     const doctorRef = query(collection(db, "doctors"), where('unity','==', ubsId ))
+    const unitysRef = query(collection(db, "unitys"), where('uid','==', ubsId ))
     const storageRef = ref(storage, `images/${doctorsId}`);
 
     getDownloadURL(storageRef)
@@ -119,9 +123,18 @@ export default function PaginaUBS( {route},{type}:Props){
                         description, 
                         title, 
                         unity,
-                    })
+                    }) 
                 })
                 setNotices(notices);
+            })
+
+            onSnapshot(unitysRef, (QuerySnapshot) => {
+                QuerySnapshot.forEach((doc) => {
+                    const unitys = doc.data()
+                    setCapacity(unitys.capacity);
+                    setStatus(unitys.status);
+                    console.log(status)
+                })   
             })
   
       }, []);
@@ -130,42 +143,54 @@ export default function PaginaUBS( {route},{type}:Props){
     const [titleColor, setTitleColor] = useState('');
     const [msg, setMsg] = useState('');
 
-    const changeTitleColor = ({type}) =>{
+    const changeTitleColor = ({capacity}) =>{
         return (
-        type ==='cheia' ? setTitleColor('Vermelho') : type ==='vazia' ? setTitleColor('Verde') : setTitleColor('Amarelo')
+            capacity ==='vazia' ? setTitleColor('Azul') : capacity ==='não está vazia' ? setTitleColor('Verde') : capacity ==='quase cheia' ? setTitleColor('Amarelo') : setTitleColor('Vermelho')
         );    
     }
 
-    const changeMsg = ({type}) =>{
+    const changeMsg = ({capacity}) =>{
         return (
-        type ==='Cheia' ? setMsg('A UBS encontra-se muita cheia') : type ==='Vazia' ? setMsg('A UBS encontra-se relativamente vazia') : setMsg('A UBS encontra-se relativamente cheia')
+            capacity ==='vazia' ? setMsg('A UBS está vazia') : capacity ==='não está vazia' ? setMsg('A UBS não está vazia') : capacity ==='quase cheia' ? setMsg('A UBS está quase cheia'): setMsg('A UBS está cheia')
         );    
     }
 
     useEffect(()=>{
-        changeTitleColor({type});
-        changeMsg({type})
+        changeTitleColor({capacity});
+        changeMsg({capacity})
     })
 
     
     return(
+
         
         <Container>
-            <Header/>
 
+<LogoColorida/>
+       
                 <Title>{ubsName}</Title>
-                <Plantao>
+                {
+                status == 'aberta' ? (
+                    <View>
+                        <Plantao>
                     <Text>Plantão</Text>
                     <PerfilDr specialty={doctorSpecialty} nome={doctorName} registro={doctorLicense} source={{uri: imageUrl}} style={{ width: "100%", height: "100%" }} />
                 </Plantao>
                 <Lotacao>
                     <Text>Capacidade</Text>
-                    <LotacaoCard type = 'vazia' titleColor={titleColor}  msg={msg}
+                    <LotacaoCard type = {capacity} titleColor={titleColor}  msg={msg}
                     />  
                 </Lotacao>
-                
+
+                    </View>
+                ) :(
+                    <Fechada>
+                        <Text>A UBS se encontra fechada</Text>
+                    </Fechada>
+                )
+            }
+
                 <Avisos>
-                
                     <Text>Avisos</Text>
                     <AvisosList 
                         data={notices}
@@ -173,10 +198,7 @@ export default function PaginaUBS( {route},{type}:Props){
                         renderItem={({item})=><AvisosCard data = {item} />}
                     />
                 </Avisos>
- 
-                <Button title="Teste de notificação" onPress={handleCallNotifications}  ></Button>
+
         </Container>
     )
-
-      
 }

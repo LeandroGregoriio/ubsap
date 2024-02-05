@@ -1,11 +1,12 @@
 import React from "react";
-import {Container,
-Text} from './style'
+import {Container, Logo} from './style';
+
+
 
 export default function Header(){
     return(
         <Container>
-            <Text>e-UBS</Text>
+            <Logo source={require('../../assets/eUbsColorido.png')} />
         </Container>
     )
 }

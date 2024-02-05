@@ -1,27 +1,39 @@
 {
   "expo": {
-    "name": "ubsapp",
-    "slug": "ubsapp",
+    "name": "e-UBS",
+    "slug": "e-UBS",
     "version": "1.0.0",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.4"
+          }
+        }
+      ]
+    ],
     "extra": {
       "eas": {
-        "projectId": "4534525d-2a9c-4d6d-a4d9-05ff76f913d5"
+        "projectId": "a8611843-356e-48fc-9197-83c1b049cdb9"
       }
     },
-    "plugins": [
-      ["expo-build-properties", {
-        "android": {
-          "compileSdkVersion": 31,
-          "targetSdkVersion": 31,
-          "buildToolsVersion": "31.0.0"
-        },
-        "ios": {
-          "deploymentTarget": "13.0"
-        }
-      } ]
-    ]
+    "android": {
+      "package": "com.leandrogregoriio.eUBS"
+    }
   }
 }

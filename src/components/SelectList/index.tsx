@@ -8,10 +8,9 @@ import CadastrarMedicamento from '../CadastrarMedicamento';
 
 export default function Select(props){
 
-
     const data = [
-        {key:'continuo', value:'Uso contínuo', },
-        {key:'temporario', value:'Uso temporário',},
+        {key:'continuo', value:'Uso contínuo'},
+        {key:'temporario', value:'Uso temporário'},
     ]
 
     const [selected, setSelected] = React.useState('');
@@ -28,7 +27,7 @@ export default function Select(props){
         boxStyles={{
             backgroundColor:'white',
             borderWidth:0,
-            marginTop:10
+            marginTop:10,
         }}
         dropdownStyles={{
             backgroundColor:'white',
@@ -36,6 +35,5 @@ export default function Select(props){
             borderStyle:'dashed',
         }}
     />
-
     )
 }

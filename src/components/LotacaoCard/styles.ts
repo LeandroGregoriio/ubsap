@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 interface Props{
-    type:'vazia' |  'cheia' | 'intermediario';
+    type:'não está vazia' | 'quase cheia' | 'cheia' | 'vazia';
 }
 
 export const Container = styled.View`
@@ -18,10 +18,9 @@ export const Container = styled.View`
 `;
 
 export const TitleColor = styled.Text<Props>`
-    color: ${({theme, type})=> type==='vazia' ? theme.colors.verde: type==='cheia' ? theme.colors.vermelho : theme.colors.amarelo };
+    color: ${({theme, type})=> type==='vazia' ? theme.colors.azul: type==='não está vazia' ? theme.colors.verde : type==='quase cheia' ? theme.colors.amarelo: theme.colors.vermelho };
     font-size: 16px;
     font-family: ${({theme})=>theme.fonts.semibold};
-
 `;
 
 
@@ -33,7 +32,7 @@ export const Msg = styled.Text`
 
 
 export const Icon = styled(Ionicons)<Props>`
-    color: ${({theme, type})=> type==='vazia' ? theme.colors.verde: type==='cheia' ? theme.colors.vermelho : theme.colors.amarelo };
+    color: ${({theme, type})=> type==='vazia' ? theme.colors.azul: type==='não está vazia' ? theme.colors.verde : type==='quase cheia' ? theme.colors.amarelo: theme.colors.vermelho };
     font-size: 40px;
     margin: 20px;
 `;
@@ -43,7 +42,7 @@ export const Dados = styled.View`
 `;
 
 export const Cor = styled.View<Props>`
-    background-color: ${({theme, type})=> type==='vazia' ? theme.colors.verde: type==='cheia' ? theme.colors.vermelho : theme.colors.amarelo };;
+    background-color: ${({theme, type})=> type==='vazia' ? theme.colors.azul: type==='não está vazia' ? theme.colors.verde : type==='quase cheia' ? theme.colors.amarelo: theme.colors.vermelho };
     width: 4%;
     height: 100%;
     border-bottom-left-radius: 5px;

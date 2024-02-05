@@ -15,7 +15,7 @@ import { TouchableOpacityProps } from "react-native";
 export interface UBSCardProps  {
     id:string,
     ubsName:string,
-    status:'Aberta' | 'Fechada',
+    status:'aberta' | 'fechada',
     time:string,
     timeNow:string
 }
@@ -42,8 +42,7 @@ export default function UBSCard({data, onPress, ...rest}:Props){
                 <Horarios>
                 <Times>{data.time}</Times>
                 <Times>{data.timeNow}</Times>
-                </Horarios>
-                
+                </Horarios>   
             </Footer>
         </Container>
     );

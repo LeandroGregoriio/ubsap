@@ -3,13 +3,14 @@ import {Container, Text} from './style'
 import { TouchableOpacityProps } from "react-native";
 
 interface Props extends TouchableOpacityProps{
-    onPress:()=>void
+    onPress:()=>void,
+    name
 }
 
-export default function ButtonAddMedicine({onPress}:Props){
+export default function ButtonAddMedicine({onPress, name}:Props){
     return(
         <Container onPress={onPress} >
-            <Text>Adicionar Mecicamento</Text>
+            <Text>{name}</Text>
         </Container>
     )
 }

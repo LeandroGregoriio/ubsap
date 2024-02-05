@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Header from "../Header";
 import { Container, Form, InputsInfo, Text } from "./style";
 import InputCadastroMedicamento from "../InputCadastroMedicamento";
 import ButtonAddMedicine from "../ButtonAddMedicine";
 import { Alert } from "react-native";
 import SelectList from "../../components/SelectList";
 import * as Notifications from 'expo-notifications';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   collection,
@@ -23,9 +23,17 @@ export default function CadastrarMedicamento() {
   const [tipo, setTipo] = useState("");
   const [continuo, setContinuo] = useState(false);
 
-  console.log('aqui'+time);
+  const [userId, setUserId] = useState('')
+
 
   useEffect(() => {
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user)=>{
+      const userId = user?.uid;
+      setUserId(userId);
+    }) 
+    
     if (tipo === 'continuo') {
       setContinuo(true);
       setTempo('∞');
@@ -43,27 +51,31 @@ export default function CadastrarMedicamento() {
   });
 
   const setupMedicationAlarms = async () => {
-    console.log("Inicia a funçao")
     // Limpar todos os alarmes existentes (caso haja algum)
     await clearAllNotifications();
 
     // Obter a data e hora atual
     const currentDate = new Date();
+    const now = new Date();
 
     // Configurar alarmes para os próximos 'time' dias com intervalo de 'interval' horas
-    for (let i = 0; i < parseInt(time); i++) {
-      const alarmDate = new Date(currentDate.getTime() + i * parseInt(interval) * 60 * 60 * 1000);
+    const alarmDate = new Date(currentDate.getTime() + parseInt(interval) * 60 * 60 * 1000);
 
-      // Calcular o tempo restante para a próxima notificação
-      const timeDiff = alarmDate.getTime() - currentDate.getTime();
-      const timeDiffHours = Math.floor(timeDiff / (60 * 60 * 1000));
-      const timeDiffMinutes = Math.floor((timeDiff % (60 * 60 * 1000)) / (60 * 1000));
+    // Calcular o tempo restante para a próxima notificação
+    const timeDiff = alarmDate.getTime() - currentDate.getTime();
+    const timeDiffHours = Math.floor(timeDiff / (60 * 60 * 1000));
+    const timeDiffMinutes = Math.floor((timeDiff % (60 * 60 * 1000)) / (60 * 1000));
 
-      console.log(`Próxima notificação em ${timeDiffHours} horas e ${timeDiffMinutes} minutos`);
+    const intervalDiff = Math.trunc((parseInt(time) * 24) / parseInt(interval));
+    currentDate.setDate(now.getDate() + intervalDiff);
 
-      // Configurar um alarme para cada dia no horário especificado
-      await scheduleNotification(alarmDate, `Tomar medicamento - Dia ${i + 1}`);
-    }
+    const seconds = Math.abs(Math.ceil(now.getTime() - currentDate.getTime()) / 1000);
+    const second = Math.abs(parseInt(interval) * 3600);
+
+    console.log(`${now.getDate()}, ${intervalDiff}, ${currentDate.getTime()} \n${second} e ${seconds}`);
+
+    // Configurar um alarme para cada dia no horário especificado
+    const notidication_id = await scheduleNotification(second, 'Tomar medicamento');
   };
 
   const clearAllNotifications = async () => {
@@ -76,43 +88,56 @@ export default function CadastrarMedicamento() {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: title,
-        body: 'É hora de tomar o medicamento.',
+        body: `É hora de tomar o medicamento ${name}`,
+        sound: true,
+        priority: Notifications.AndroidNotificationPriority.HIGH,
+        data: {
+          meddicice: {
+            interval,
+            name,
+            time,
+            continuo
+          },
+        },
       },
       trigger: {
-        date,
-        repeats: 'daily', // Repetir diariamente
+        seconds: date,
+        repeats: true, // Repetir diariamente
       },
     });
   };
 
   async function AddMedicamento() {
-    setLoading(true);
     try {
+      
       if (parseInt(interval) > 24) {
         Alert.alert("O intervalo não pode ser superior a 24h");
         console.log("O valor é maior que 24");
       } else {
-        const docRef = await addDoc(collection(db, "medicines"), {
+
+        const docRef = addDoc(collection(db, "medicines"), {
           interval,
           name,
           time,
-          continuo
+          continuo,
+          userId:userId
         });
-        setLoading(false);
+
         Alert.alert("Medicamento cadastrado com sucesso!");
         setupMedicationAlarms(); // Configurar notificações após o cadastro
       }
       setIntervalo('');
       setNome('');
       setTempo('');
+      
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
-  setupMedicationAlarms();
 
   return (
-    <Container>
+
+ <Container>
       <Form>
         <InputCadastroMedicamento
           value={name}
@@ -155,7 +180,7 @@ export default function CadastrarMedicamento() {
         </InputsInfo>
       </Form>
       {tipo !== "" && name !== "" && time !== "" && interval !== "" ? (
-        <ButtonAddMedicine onPress={AddMedicamento} />
+        <ButtonAddMedicine onPress={AddMedicamento} name='Adicionar Medicamento'/>
       ) : (
         <Text> Preencha todos os campos!</Text>
       )}
